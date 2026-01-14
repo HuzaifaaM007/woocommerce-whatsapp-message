@@ -5,7 +5,7 @@ jQuery(document).ready(function($){
         let price = $(this).data('product-price');
         let sku = $(this).data('product-sku') ? $(this).data('product-sku') : 'N/A';
         let url = $(this).data('product-url');
-        let phone = '+923149313252';
+        let phone = '+923000000000'; // modify this number to send message....
 
         let message = 'Hello %0A';
         message += 'I am intrested in this product: %0A';
@@ -19,4 +19,5 @@ jQuery(document).ready(function($){
         window.open(whatsApp_url, '_blank');
      })
     
+
 })
