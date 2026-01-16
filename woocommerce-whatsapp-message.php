@@ -13,6 +13,8 @@
 
 
 require_once plugin_dir_path(__FILE__) . 'admin/setting.php';
+require_once plugin_dir_path(__FILE__) . 'includes/features/popups/cart_shipping_info_popup.php';
+
 
 
 // if accessed directly exit
@@ -40,7 +42,7 @@ add_action('admin_notices', 'wcwm_wc_missing_notice');
 
 function wcwm_add_button_after_add_to_cart()
 {
-    if (!wcwm_is_woocommerce_active() || !is_product() ) {
+    if (!wcwm_is_woocommerce_active() || !is_product()) {
         return;
     }
 
@@ -48,32 +50,32 @@ function wcwm_add_button_after_add_to_cart()
 
     $product = wc_get_product($product_id);
 
-    $wcwm_locations = get_option('wcwm_locations',[]);
+    $wcwm_locations = get_option('wcwm_locations', []);
 
     if (!array($wcwm_locations)) {
         return;
     }
 
     if (($wcwm_locations['detail'] ?? 'no') === 'yes') {
-        
+
 ?>
 
-    <button
-        type="button"
-        class="wcwm-button button"
-        data-product-name="<?php echo esc_attr($product->get_name()); ?>"
-        data-product-price="<?php echo esc_attr($product->get_price()); ?>"
-        data-product-sku="<?php echo esc_attr($product->get_sku()); ?>"
-        data-product-url="<?php echo esc_url(get_permalink($product->get_id())); ?>"
-        data-admin-phone-number="<?php echo esc_attr(get_option('wcwm_admin_phone_number')); ?>">
-        Send to WhatsApp
-    </button>
+        <button
+            type="button"
+            class="wcwm-button button"
+            data-product-name="<?php echo esc_attr($product->get_name()); ?>"
+            data-product-price="<?php echo esc_attr($product->get_price()); ?>"
+            data-product-sku="<?php echo esc_attr($product->get_sku()); ?>"
+            data-product-url="<?php echo esc_url(get_permalink($product->get_id())); ?>"
+            data-admin-phone-number="<?php echo esc_attr(get_option('wcwm_admin_phone_number')); ?>">
+            Send to WhatsApp
+        </button>
 
-    <div id="wcwm-message" style="margin-top:10px;"></div>
-<?php
+        <div id="wcwm-message" style="margin-top:10px;"></div>
+    <?php
 
     }
-    }
+}
 
 add_action('woocommerce_after_add_to_cart_button', 'wcwm_add_button_after_add_to_cart');
 
@@ -90,7 +92,7 @@ function wcwm_add_button_after_product_card()
         return;
     }
 
-        $wcwm_locations = get_option('wcwm_locations',[]);
+    $wcwm_locations = get_option('wcwm_locations', []);
 
     if (!array($wcwm_locations)) {
         return;
@@ -98,23 +100,22 @@ function wcwm_add_button_after_product_card()
 
     if (($wcwm_locations['list'] ?? 'no') === 'yes') {
 
-?>
+    ?>
 
-    <button
-        type="button"
-        class="wcwm-button button"
-        data-product-name="<?php echo esc_attr($product->get_name()); ?>"
-        data-product-price="<?php echo esc_attr($product->get_price()); ?>"
-        data-product-sku="<?php echo esc_attr($product->get_sku()); ?>"
-        data-product-url="<?php echo esc_url(get_permalink($product->get_id())); ?>"
-        data-admin-phone-number="<?php echo esc_attr(get_option('wcwm_admin_phone_number')); ?>">
-        Send to WhatsApp
-    </button>
+        <button
+            type="button"
+            class="wcwm-button button"
+            data-product-name="<?php echo esc_attr($product->get_name()); ?>"
+            data-product-price="<?php echo esc_attr($product->get_price()); ?>"
+            data-product-sku="<?php echo esc_attr($product->get_sku()); ?>"
+            data-product-url="<?php echo esc_url(get_permalink($product->get_id())); ?>"
+            data-admin-phone-number="<?php echo esc_attr(get_option('wcwm_admin_phone_number')); ?>">
+            Send to WhatsApp
+        </button>
 
-    <div id="wcwm-message" style="margin-top:10px;"></div>
-<?php
+        <div id="wcwm-message" style="margin-top:10px;"></div>
+    <?php
     }
-
 }
 
 add_action('woocommerce_after_shop_loop_item', 'wcwm_add_button_after_product_card');
@@ -127,7 +128,7 @@ function wcwm_add_button_after_checkout()
         return;
     }
 
-        $wcwm_locations = get_option('wcwm_locations',[]);
+    $wcwm_locations = get_option('wcwm_locations', []);
 
     if (!array($wcwm_locations)) {
         return;
@@ -136,32 +137,64 @@ function wcwm_add_button_after_checkout()
     if (($wcwm_locations['checkout'] ?? 'no') === 'yes') {
 
 
-?>
+    ?>
 
-    <div style="margin-top:10px;">
-        <button
-            type="submit"
-            class="wcwm-checkout-button button"
-            style="margin-top: 10px;">
-            <!-- name="custom-order" -->
-
-
-            <!-- data-cart="<?php wc()->cart->get_cart() ?>" -->
-            <!-- data-cart-total="<?php wc()->cart->get_cart_total() ?>" -->
-            <!-- data-cart-subtotal="<?php wc()->cart->get_cart_subtotal() ?>" -->
+        <div style="margin-top:10px;">
+            <button
+                type="submit"
+                class="wcwm-checkout-button button"
+                style="margin-top: 10px;">
+                <!-- name="custom-order" -->
 
 
-            CheckOut using WhatsApp</button>
-    </div>
+                <!-- data-cart="<?php wc()->cart->get_cart() ?>" -->
+                <!-- data-cart-total="<?php wc()->cart->get_cart_total() ?>" -->
+                <!-- data-cart-subtotal="<?php wc()->cart->get_cart_subtotal() ?>" -->
 
 
-<?php
+                CheckOut using WhatsApp</button>
+        </div>
+
+
+    <?php
     }
 }
 
 add_action("woocommerce_review_order_after_submit", "wcwm_add_button_after_checkout");
 
 
+function wcwm_add_button_after_cart_totals()
+{
+    if (!wcwm_is_woocommerce_active()) {
+        return;
+    }
+
+    $wcwm_locations = get_option('wcwm_locations', []);
+
+    if (!array($wcwm_locations)) {
+        return;
+    }
+
+    if (($wcwm_locations['cart'] ?? 'no') === 'yes') {
+
+    ?>
+
+        <button
+            type="button"
+            class="wcwm-act-button button"
+            style="
+            padding-left: 1em;
+            font-size: 1.1em;
+            line-height :1.8em;
+            display:block
+            ">
+            Send to WhatsApp
+        </button>
+<?php
+    }
+}
+
+add_action("woocommerce_after_cart_totals","wcwm_add_button_after_cart_totals");
 
 function wcwm_order_data($order_id)
 {
@@ -235,9 +268,9 @@ add_action('wp_enqueue_scripts', 'wcwm_enqueue_scripts');
 
 function wcwm_localize_cart_data()
 {
-    if (!is_checkout()) {
-        return;
-    }
+    // if (!is_checkout()) {
+    //     return;
+    // }
 
     if (wc()->cart->is_empty()) {
         return;

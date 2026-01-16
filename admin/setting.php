@@ -45,6 +45,16 @@ function wcwm_add_admin_phone_number($settings){
 
         ),
 
+                        array(
+            'title' => __('WhatsApp_in_cart_page','woocommerce'),
+            'desc'=> __('Check it if you want to show the whatsapp option on cart page'),
+            'id' => 'wcwm_locations[cart]',
+            'type' => 'checkbox',
+            'default' => 'yes',
+
+        ),
+
+
                 array(
             'title' => __('WhatsApp_in_checkout_page','woocommerce'),
             'desc'=> __('Check it if you want to show the whatsapp option in checkout page'),
