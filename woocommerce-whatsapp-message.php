@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name: woocommerce whatsapp message
- * Plugin URI: https://example.com
+ * Plugin URI: https://whatsappMessenger.com
  * Description: A simple WooCommerce plugin that send the order details on whatsapp
  * Version: 1.0
  * Author: Huzaifa
@@ -12,7 +12,7 @@
 
 
 
-require_once plugin_dir_path(__FILE__) . 'admin/setting.php';
+require_once plugin_dir_path(__FILE__) . 'admin/settings.php';
 require_once plugin_dir_path(__FILE__) . 'includes/features/popups/cart_shipping_info_popup.php';
 
 
@@ -38,6 +38,31 @@ function wcwm_wc_missing_notice()
 }
 
 add_action('admin_notices', 'wcwm_wc_missing_notice');
+
+/**
+ * Add custom links (e.g., Settings) on the Plugins list page
+ *
+ * @param array $links Existing plugin action links (Deactivate, Edit, etc.)
+ * @return array Modified array with Settings link
+ */
+function wcwm_add_action_links(array $links)
+{
+
+    $settings_url = admin_url('admin.php?page=wc-settings&tab=wcwm_settings');
+    $settings_link = sprintf(
+        '<a href="%s">%s</a>',
+        esc_url($settings_url),
+        __('Settings', 'woocommerce-whatsapp-message'),
+    );
+
+    array_unshift($links, $settings_link);
+
+    return $links;
+}
+
+
+add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'wcwm_add_action_links');
+
 
 
 function wcwm_add_button_after_add_to_cart()
@@ -194,7 +219,7 @@ function wcwm_add_button_after_cart_totals()
     }
 }
 
-add_action("woocommerce_after_cart_totals","wcwm_add_button_after_cart_totals");
+add_action("woocommerce_after_cart_totals", "wcwm_add_button_after_cart_totals");
 
 function wcwm_order_data($order_id)
 {
@@ -258,7 +283,10 @@ function wcwm_enqueue_scripts()
         true
 
     );
+
+    
 }
+
 
 
 
