@@ -22,6 +22,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+define('WCWM_VERSION', '1.0.0');
+
 function wcwm_is_woocommerce_active()
 {
     return class_exists('WooCommerce');
@@ -87,7 +89,7 @@ function wcwm_add_button_after_add_to_cart()
 
         <button
             type="button"
-            class="wcwm-button button"
+            class="wcwm-button wcwm-context-product button"
             data-product-name="<?php echo esc_attr($product->get_name()); ?>"
             data-product-price="<?php echo esc_attr($product->get_price()); ?>"
             data-product-sku="<?php echo esc_attr($product->get_sku()); ?>"
@@ -119,7 +121,7 @@ function wcwm_add_button_after_product_card()
 
     $wcwm_locations = get_option('wcwm_locations', []);
 
-    if (!array($wcwm_locations)) {
+    if (!is_array($wcwm_locations)) {
         return;
     }
 
@@ -129,7 +131,7 @@ function wcwm_add_button_after_product_card()
 
         <button
             type="button"
-            class="wcwm-button button"
+            class="wcwm-button wcwm-context-list button"
             data-product-name="<?php echo esc_attr($product->get_name()); ?>"
             data-product-price="<?php echo esc_attr($product->get_price()); ?>"
             data-product-sku="<?php echo esc_attr($product->get_sku()); ?>"
@@ -155,7 +157,7 @@ function wcwm_add_button_after_checkout()
 
     $wcwm_locations = get_option('wcwm_locations', []);
 
-    if (!array($wcwm_locations)) {
+    if (!is_array($wcwm_locations)) {
         return;
     }
 
@@ -167,7 +169,7 @@ function wcwm_add_button_after_checkout()
         <div style="margin-top:10px;">
             <button
                 type="submit"
-                class="wcwm-checkout-button button"
+                class="wcwm-button wcwm-context-checkout button "
                 style="margin-top: 10px;">
                 <!-- name="custom-order" -->
 
@@ -206,13 +208,7 @@ function wcwm_add_button_after_cart_totals()
 
         <button
             type="button"
-            class="wcwm-act-button button"
-            style="
-            padding-left: 1em;
-            font-size: 1.1em;
-            line-height :1.8em;
-            display:block
-            ">
+            class="wcwm-button wcwm-context-cart button">
             Send to WhatsApp
         </button>
 <?php
@@ -279,12 +275,19 @@ function wcwm_enqueue_scripts()
         'wcwm-js',
         plugin_dir_url(__FILE__) . 'wcwm.js',
         array('jquery'),
-        '1.0',
+        WCWM_VERSION,
         true
 
     );
 
-    
+    wp_enqueue_style(
+        'wcwm-css',
+        plugin_dir_url(__FILE__) . 'wcwm.css',
+        array(),
+        WCWM_VERSION,
+        'all'
+
+    );
 }
 
 
